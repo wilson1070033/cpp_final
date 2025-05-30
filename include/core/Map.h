@@ -17,6 +17,7 @@ private:
 public:
     Map(int w, int h, int* r);
     int draw();
+    void resetGrid();  // 新增重置地圖的方法
     bool setXY(int x, int y, char c);
     void addScore(int i) {score += 1;}
     bool getO(int x, int y);

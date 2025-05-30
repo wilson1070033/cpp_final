@@ -18,6 +18,11 @@ Controller::~Controller() {
     cleanup();
 }
 
+// 清除螢幕函式
+void Controller::clearScreen() {
+    cout << "\033[2J\033[1;1H" << flush;
+}
+
 void Controller::initializeGame() {
     srand(static_cast<unsigned int>(time(0)));
 
@@ -28,6 +33,7 @@ void Controller::initializeGame() {
     gameMap = new Map(W, H, R);
     GameObject::setMap(gameMap);
 
+    // 青蛙放在最前面，確保優先處理
     gameObjects.push_back(new Frog(randBtw(15, 25), 9, 'F'));
 
     int x, d;
@@ -55,17 +61,31 @@ void Controller::initializeGame() {
 
 void Controller::gameLoop() {
     while(true) {
-        system("cls");
-        GameObject::draw();
+        clearScreen();
 
+        // 在每個循環開始時重置地圖
+        gameMap->resetGrid();
+
+        bool gameOver = false;
+
+        // 移動所有物體並檢查碰撞
         for(auto o : gameObjects) {
             if(!o->move()) {
-                system("cls");
-                usleep(GAME_UPDATE_DELAY);
-                cout << "\n\n\n===== GAME OVER =====" << endl;
-                return;
+                gameOver = true;
+                break;
             }
         }
+
+        if(gameOver) {
+            clearScreen();
+            cout << "\n\n\n===== GAME OVER =====" << endl;
+            usleep(GAME_UPDATE_DELAY);
+            return;
+        }
+
+        // 顯示遊戲畫面
+        GameObject::draw();
+
         usleep(GAME_UPDATE_DELAY);
     }
 }

@@ -35,8 +35,13 @@ int Map::draw() {
             cout << grid[i][j];
         cout << endl;
     }
-    grid = g0;
+    // 移除了 grid = g0; 這行，改為在適當時機重置
     return 0;
+}
+
+// 新增重置地圖的方法
+void Map::resetGrid() {
+    grid = g0;
 }
 
 bool Map::setXY(int x, int y, char c) {

@@ -13,6 +13,9 @@ private:
     Map* gameMap;
     vector<GameObject*> gameObjects;
 
+    // 清除螢幕的私有方法
+    void clearScreen();
+
 public:
     Controller();
     ~Controller();
