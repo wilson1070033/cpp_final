@@ -5,30 +5,22 @@
 
 using namespace std;
 
-// 前向宣告
-class LevelManager;
-
 class Map
 {
 private:
     int W, H;
     int* R;
+    const int P = 2;
     int score = 0;
     vector<vector<char>> grid, g0;
-    static LevelManager* levelManager; // 靜態指標指向關卡管理器
 
 public:
     Map(int w, int h, int* r);
     int draw();
-    void resetGrid();
+    void resetGrid();  // 新增重置地圖的方法
     bool setXY(int x, int y, char c);
-    void addScore(int i);
+    void addScore(int i) {score += 1;}
     bool getO(int x, int y);
-    int getScore() const { return score; }
-
-    // 關卡系統相關
-    static void setLevelManager(LevelManager* lm) { levelManager = lm; }
-    static LevelManager* getLevelManager() { return levelManager; }
 };
 
 #endif
