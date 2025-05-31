@@ -23,4 +23,6 @@ add_executable(project main.cpp
         src/entities/Frog.cpp
         include/core/Controller.h
         src/core/Controller.cpp
+        include/core/LevelManager.h
+        src/core/LevelManager.cpp
 )

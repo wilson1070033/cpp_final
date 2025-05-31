@@ -1,7 +1,11 @@
 #include "../../include/core/Map.h"
+#include "../../include/core/LevelManager.h"
 #include <iostream>
 
 using namespace std;
+
+// 靜態成員初始化
+LevelManager* Map::levelManager = nullptr;
 
 bool Map::getO(int x, int y) {
     if(y >= 0 && y < H && x >= 0 && x < W) {
@@ -28,20 +32,61 @@ Map::Map(int w, int h, int* r) : W(w), H(h), R(r) {
 }
 
 int Map::draw() {
-    cout << "Score: " << score << endl;
+    // 顯示總分數（如果有關卡管理器，顯示關卡分數）
+    if(levelManager) {
+        cout << "Total Score: " << score << " | Level Score: " << levelManager->getCurrentLevelScore() << endl;
+    } else {
+        cout << "Score: " << score << endl;
+    }
+
+    // 繪製地圖邊框
+    cout << "┌";
+    for(int j = 0; j < W; j++) cout << "─";
+    cout << "┐" << endl;
+
     for(int i = 0; i < H; i++)
     {
-        for(int j = 0; j < W; j++)
-            cout << grid[i][j];
+        cout << "│";
+        for(int j = 0; j < W; j++) {
+            char cell = grid[i][j];
+
+            // 顯示遊戲元素
+            cout << cell;
+        }
+        cout << "│";
+
+        // 在右側顯示額外資訊
+        if(i == 0) {
+            cout << "  TARGET ZONE";
+        } else if(i == H-1) {
+            cout << "  START ZONE";
+        } else if(R[i] == 1) {
+            cout << "  SAFE ZONE";
+        } else {
+            cout << "  DANGER ROAD";
+        }
+
         cout << endl;
     }
-    // 移除了 grid = g0; 這行，改為在適當時機重置
+
+    cout << "└";
+    for(int j = 0; j < W; j++) cout << "─";
+    cout << "┘" << endl;
+
     return 0;
 }
 
-// 新增重置地圖的方法
 void Map::resetGrid() {
     grid = g0;
+}
+
+void Map::addScore(int i) {
+    score += i;
+
+    // 如果有關卡管理器，也更新關卡分數
+    if(levelManager) {
+        levelManager->addScore(i);
+    }
 }
 
 bool Map::setXY(int x, int y, char c) {
